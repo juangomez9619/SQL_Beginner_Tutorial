@@ -112,4 +112,4 @@ En realidad es un lenguaje híbrido. Se compone de 4 lenguajes:
 
 ## Query
 
-Conjunto de instrucciones dados al RDBSM para obtener información de interés. Tener en cuenta que en una base de datos puede haber mucha información, en algunos casos oculta en esquemas complejos, donde el objetivo es obtener los datos correctos.
+Instrucciones dadas al RDBSM para obtener información de interés. Tener en cuenta que en una base de datos puede haber mucha información, en algunos casos oculta en esquemas complejos, donde el objetivo es obtener los datos correctos.
