@@ -113,3 +113,90 @@ En realidad es un lenguaje híbrido. Se compone de 4 lenguajes:
 ## Query
 
 Instrucciones dadas al RDBSM para obtener información de interés. Tener en cuenta que en una base de datos puede haber mucha información, en algunos casos oculta en esquemas complejos, donde el objetivo es obtener los datos correctos.
+
+# MySQL
+Crear una nueva base de datos, en MySQL command line:
+```SQL
+create database <database_name>;
+```
+## Tipos de datos:
+Existen los siguientes tipos de datos, en general, disponibles en SQL:
++ **INT**: Números enteros
++ **DECIMAL (M,N)**
+    + M: Cantidad TOTAL de dígitos.
+    + N: Cantidad de dígitos después de la coma.
++ **VARCHAR(x)**: Cadena de texto de tamaño x.
++ **BLOB**: Binary large object. Sirve para almacenar datos grandes.
++ **DATE**: Formato 'YYYY-MM-DD'.
++ **TIMESTAMP**: Formato 'YYYY-MM-DD HH:MM:SS' Utilizada para registrar algún evento de interés.
+
+## Crear una tabla
+```sql
+CREATE TABLE <table_name> (
+    <column_name> INT PRIMARY KEY,
+    <column_name>  VARCHAR(20),
+    <column_name>  VARCHAR(20)
+);
+```
+Produce lo mismo qué:
+```sql
+CREATE TABLE student (
+    student_id INT,
+    name VARCHAR(20),
+    major VARCHAR(20),
+    PRIMARY KEY(student_id)
+);
+```
+Para ver información básica de la tabla creada:
+```sql
+DESCRIBE <table_name>;
+```
+Para borrar una tabla:
+```sql
+DROP TABLE <table_name>;
+```
+
+Modificar una tabla ya creada, agregando una nueva columna:
+```sql
+ALTER TABLE student ADD gpa DECIMAL(3, 2);
+```
+Modificar una tabla ya creada, eliminando una columna:
+```sql
+ALTER TABLE <table_name> DROP <column_name>;
+```
+
+## Insertar datos
+Se ingresan por fila, respetando el orden las columnas:
+```sql
+INSERT INTO student VALUES(1, 'Jack', 'Biology');
+```
+Leer toda la info de una tabla:
+```sql
+SELECT *  FROM student;
+```
+Insertar info para columnas específicas:
+```sql
+INSERT INTO student (student_id, name) VALUES(3, 'Claire');
+```
+
+### Constraints - Limitaciones
+Otra forma de crear una tabla limitando valores por columna:
+```sql
+CREATE TABLE student (
+    student_id INT,
+    name VARCHAR(20) NOT NULL --No admite valores nulos,
+    major VARCHAR(20) UNIQUE -- No admite valores repetidos,
+    PRIMARY KEY (student_id)
+);
+```
+En particular, una llave primario **NO** admite valores nulos ni duplicados.
+
+Se puede especificar un valor por defecto en caso de que no se tenga el dato:
+```sql
+CREATE TABLE student (
+    student_id INT,
+    name VARCHAR(20),
+    major VARCHAR(20) DEFAULT 'undecided', --Valor por defecto
+    PRIMARY KEY (student_id)
+);
+```
