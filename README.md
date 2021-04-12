@@ -200,4 +200,81 @@ CREATE TABLE student (
     PRIMARY KEY (student_id)
 );
 ```
+La llave primaria puede incrementarse de manera automática:
+```sql
+CREATE TABLE student(
+    student_id INT AUTO_INCREMENT,
+    name VARCHAR(20),
+    major VARCHAR(20),
+    PRIMARY KEY(student_id)
+);
+```
 
+## Actualizar y borrar
+
+Actualizando el valor de una columna:
+```sql
+UPDATE student 
+SET major = 'Bio' --Nuevo valor
+WHERE major = 'Biology';--Condición
+```
+Existen los siguientes operadores de comparación:
+```sql
+= --igual que
+<> -- Diferente que
+> -- Mayor que
+< -- Menor que
+>= --Mayor o igual que
+<= -- Menor o igual que 
+```
+
+Se puede incluir varias condiciones:
+```sql
+UPDATE student 
+SET major = 'Biochemistry'
+WHERE major = 'Bio' OR
+      major = 'Chemistry';
+```
+Sin la sentencia WHERE, todos los registros se ven afectados:
+```SQL
+UPDATE student
+SET major = 'undecided';
+```
+
+Borrando un registro de la tabla:
+```sql
+DELETE FROM student
+WHERE student_id = 5;
+--Si no se coloca WHERE, se borran todos los registros
+```
+
+## Consultas básicas
+
+Leer una columna específica:
+```sql
+SELECT name
+FROM student;
+--
+SELECT name, major
+FROM student;
+--
+SELECT student.name, student.major
+FROM student
+ORDER BY name; --Orden ascendente
+--
+SELECT student.name, student.major
+FROM student
+ORDER BY student_id DESC; --Orden descendente
+--
+SELECT * 
+FROM student
+ORDER BY major, student_id; 
+-- Ordenando primero por major, si hay  2 major iguales
+-- ordena por student_id
+--
+SELECT * 
+FROM student
+ORDER BY major DESC, student_id DESC;
+-- Ambos ordenes en orden descendente
+
+```
