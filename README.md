@@ -271,10 +271,83 @@ FROM student
 ORDER BY major, student_id; 
 -- Ordenando primero por major, si hay  2 major iguales
 -- ordena por student_id
---
+
+---------------------------------------------------------------
 SELECT * 
 FROM student
-ORDER BY major DESC, student_id DESC;
--- Ambos ordenes en orden descendente
+ORDER BY major DESC, student_id DESC; -- Ambos ordenes en orden descendente
 
+
+SELECT name, major
+FROM student
+WHERE major = 'Chemistry' OR major <> 'Biology'
+ORDER BY student_id
+LIMIT 2;
+
+SELECT *
+FROM student
+WHERE name IN ('Claire', 'Jack'); --Valores dentro de una lista
 ```
+
+# Ejemplo - Company Database
+
+En primer lugar se crean las tablas, únicamente definiendo las llaves primarias de cada una:
+```sql
+CREATE TABLE employee(
+    emp_id INT PRIMARY KEY, 
+    first_name VARCHAR(40),
+    last_name VARCHAR(40),
+    birth_day DATE,
+    sex VARCHAR(1),
+    salary INT,
+    super_id INT, 
+    branch_id INT 
+);
+
+CREATE TABLE branch(
+    branch_id INT PRIMARY KEY,
+    branch_name VARCHAR(40),
+    mgr_id INT,
+    mgr_start_date DATE,
+    FOREIGN KEY(mgr_id) REFERENCES employee(emp_id) ON DELETE SET NULL
+);
+
+-- Definiendo clave foránea en una tabla ya creada:
+ALTER TABLE employee
+ADD FOREIGN KEY(branch_id)
+REFERENCES branch(branch_id)
+ON DELETE SET NULL;
+
+ALTER TABLE employee
+ADD FOREIGN KEY(super_id)
+REFERENCES employee(emp_id)
+ON DELETE SET NULL;
+
+CREATE TABLE client(
+    client_id INT PRIMARY KEY,
+    client_name VARCHAR(40),
+    branch_id INT,
+    FOREIGN KEY(branch_id) REFERENCES branch(branch_id)
+    ON DELETE SET NULL
+);
+
+CREATE TABLE works_with(
+    emp_id INT,
+    client_id INT,
+    total_sales INT,
+    PRIMARY KEY(emp_id, client_id), --LLAVE COMPUESTA
+    FOREIGN KEY(emp_id) REFERENCES employee(emp_id) ON DELETE CASCADE,
+    FOREIGN KEY(client_id) REFERENCES  client(client_id) ON DELETE CASCADE
+);
+
+CREATE TABLE branch_supplier(
+    branch_id INT,
+    supplier_name VARCHAR(40),
+    supply_type VARCHAR(40),
+    PRIMARY KEY(branch_id, supplier_name),
+    FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE CASCADE
+);
+
+--AGREGANDO REGISTROS
+```
+
