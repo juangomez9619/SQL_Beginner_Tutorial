@@ -423,8 +423,137 @@ INSERT INTO works_with VALUES(105, 406, 130000);
 -- Seleccionar columnas y cambiarles el nombre
 SELECT first_name as forename, last_name as surname
 FROM employee
--- Seleccionar los diferentes valores de una columna
+-- Seleccionar los DIFERENTES valores de una columna
 SELECT DISTINCT sex
 from employee;
+```
 
+# Funciones
+
+Bloque de código que realiza alguna tarea particular:
+```sql
+-- Encontrar cantidad de empleados 
+SELECT COUNT(emp_id)
+FROM employee;
+
+--Encontrar cantidad de empleados con supervisor
+SELECT COUNT(super_id)
+FROM employee;
+
+--Empleadas (F) que nacieron después de 1970
+SELECT COUNT(emp_id) as Resultado
+FROM employee
+WHERE employee.sex = 'F' AND
+employee.birth_day > '1971-01-01';
+
+
+-- PROMEDIO DE UN SALARIO
+SELECT AVG(salary)
+FROM employee
+WHERE sex = 'M';
+
+-- SUMA DE LOS SALARIOS
+SELECT SUM(salary)
+FROM  employee;
+
+--  Calcular la cantidad de hombres y mujeres
+SELECT COUNT(sex), sex
+FROM employee
+GROUP BY sex;
+
+--AGREGACIONES
+
+-- Total de ventas($) por cada vendedor
+SELECT emp_id, SUM(total_sales)
+FROM works_with
+GROUP BY emp_id;
+
+-- Total de ventas($) por cliente
+SELECT client_id, SUM(total_sales)
+FROM works_with
+GROUP BY client_id;
+```
+
+# Wildcard - comodines
+
+Utilizado para generar comodines en expresiones regulares:
++ %: Cualquier cantidad de caracteres.
++ _: Un caracter
+```sql
+
+SELECT *
+FROM client
+WHERE client_name LIKE '%LLC'; --LLC al final de x caracteres
+
+SELECT *
+FROM branch_supplier
+WHERE  supplier_name LIKE '% Labels%';
+
+
+SELECT * 
+FROM employee
+WHERE birth_day LIKE '____-10%'; --4 caracteres para el año
+
+SELECT *
+FROM client 
+WHERE client_name LIKE '%school%';
+```
+
+# Unión
+
+Combinar resultados de multiples SELECT en un solo resultado.
++ Se debe tener la MISMA cantidad de columnas
++ Deben tener tipos de datos iguales
+```sql
+SELECT first_name AS Company_names 
+FROM employee
+UNION -- Union x columna
+SELECT branch_name
+FROM branch
+UNION 
+SELECT client_name
+FROM client;
+
+SELECT client_name, client.branch_id 
+FROM client
+UNION 
+SELECT supplier_name, branch_supplier.branch_id
+FROM branch_supplier;
+
+SELECT salary 
+FROM employee
+UNION
+SELECT total_sales
+FROM works_with;
+```
+
+# JOINS
+
+Combinar información de múltiples columnas comunes.
+Existen varios tipos:
++ JOIN (INNER JOIN).
++ LEFT JOIN.
++ RIGHT JOIN.
++ FULL OUTTER JOIN.
+```SQL
+
+SELECT employee.emp_id, employee.first_name, branch.branch_name
+FROM employee -- A 
+INNER JOIN branch --  B 
+--A intersección B
+ON employee.emp_id = branch.mgr_id;--condición
+
+
+SELECT employee.emp_id, employee.first_name, branch.branch_name
+FROM employee -- Todos sus registros se incluyen
+lEFT JOIN branch  --Se agrega info de B en A
+ON employee.emp_id = branch.mgr_id;-- Condición
+
+
+SELECT employee.emp_id, employee.first_name, branch.branch_name
+FROM employee --Se agrega info de A en B
+RIGHT JOIN branch -- Todos sus registros se incluyen
+ON employee.emp_id = branch.mgr_id;
+
+--Existe el full outter join, incluye todo
 ```
