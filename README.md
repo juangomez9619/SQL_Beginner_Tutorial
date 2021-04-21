@@ -557,3 +557,23 @@ ON employee.emp_id = branch.mgr_id;
 
 --Existe el full outter join, incluye todo
 ```
+# Consultas anidadas
+
+```sql
+SELECT first_name, last_name
+FROM employee
+WHERE employee.emp_id IN(
+    SELECT emp_id
+    FROM Works_with
+    WHERE total_sales > 30000);
+```
+MySQL resuelve una consulta anidada comenzando por la "más profunda" hasta la más general:
+```sql
+SELECT client.client_name--Se resuelve al final
+FROM client
+WHERE Client.branch_id = (
+    SELECT branch.branch_id --Se resuelve primero
+    FROM branch
+    WHERE branch.mgr_id = 102
+    LIMIT 1); --conviene ponerlo
+```
