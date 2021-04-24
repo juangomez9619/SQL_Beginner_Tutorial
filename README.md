@@ -577,3 +577,55 @@ WHERE Client.branch_id = (
     WHERE branch.mgr_id = 102
     LIMIT 1); --conviene ponerlo
 ```
+# On delete
+Al eliminar un registro que tiene presente una llave foránea, ¿que sucede?.
+
+Hay dos opciones
+```SQL
+ON DELETE SET NULL --Deja el dato como NULL
+ON DELETE CASCADE --Se elimina toda la fila
+
+DELETE FROM employee
+WHERE emp_id = 102;
+```
+SET NULL es útil cuando la información eliminada no es relevante. En caso de que, por ejemplo, una llave foránea sea una de las que compone una llave primaria, si es necesario eliminar todo el registro con CASCADE.
+
+# Triggers
+
+Eventos que ocurren cuando se realiza alguna consulta en la base de datos. En MySQL es necesario cambiar el delimitador para poder definir los triggers de manera correcta:
+```sql
+DELIMITER $$ --Cambia el delimitador (; por defecto)
+CREATE 
+TRIGGER my_trigger BEFORE INSERT --Puede ser AFTER
+ON employee
+FOR EACH ROW BEGIN
+INSERT INTO trigger_test VALUES("Added new employee");
+END $$
+DELIMITER;
+
+DELIMITER $$ --Cambia el delimitador (; por defecto)
+CREATE 
+TRIGGER my_trigger_1 BEFORE INSERT 
+ON employee
+FOR EACH ROW BEGIN
+INSERT INTO trigger_test VALUES(NEW.first_name);
+END $$
+DELIMITER; 
+
+DELIMITER $$
+CREATE
+	TRIGGER my_trigger_2 BEFORE INSERT
+	ON employee
+	FOR EACH ROW BEGIN
+		IF NEW.sex = 'M' THEN
+			INSERT INTO trigger_test VALUES('Added male employee');
+		ELSEIF NEW.sex = 'F' THEN
+			INSERT INTO trigger_test VALUES('Added female employee);
+		ELSE
+			INSERT INTO trigger_test VALUES('Added other employee');
+		END IF;
+	END$$
+DELIMITER ;
+
+DROP TRIGGER <my_trigger>; --Eliminar trigger  
+```
